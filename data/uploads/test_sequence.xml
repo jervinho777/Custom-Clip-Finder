@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xmeml>
+<xmeml version="4">
+	<sequence id="sequence-1">
+		<uuid>c7721b36-c150-48f5-ab77-6d5e0df2749a</uuid>
+		<duration>1375</duration>
+		<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+		<n>Test_Clip</n>
+		<media>
+			<video>
+				<format>
+					<samplecharacteristics>
+						<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+						<width>1280</width>
+						<height>720</height>
+						<anamorphic>FALSE</anamorphic>
+						<pixelaspectratio>square</pixelaspectratio>
+						<fielddominance>none</fielddominance>
+						<colordepth>24</colordepth>
+					</samplecharacteristics>
+				</format>
+				<track>
+				<clipitem id="clipitem-100">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>0</start>
+					<end>150</end>
+					<in>3000</in>
+					<out>3150</out>
+					<pproTicksIn>30481920000000</pproTicksIn>
+					<pproTicksOut>32006016000000</pproTicksOut>
+					<alphatype>none</alphatype>
+					<pixelaspectratio>square</pixelaspectratio>
+					<anamorphic>FALSE</anamorphic>
+					<file id="file-1"/>
+					<link><linkclipref>clipitem-100</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>1</clipindex></link>
+					<link><linkclipref>clipitem-200</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>1</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-300</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>1</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-101">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>150</start>
+					<end>400</end>
+					<in>2750</in>
+					<out>3000</out>
+					<pproTicksIn>27941760000000</pproTicksIn>
+					<pproTicksOut>30481920000000</pproTicksOut>
+					<alphatype>none</alphatype>
+					<pixelaspectratio>square</pixelaspectratio>
+					<anamorphic>FALSE</anamorphic>
+					<file id="file-1"/>
+					<link><linkclipref>clipitem-101</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>2</clipindex></link>
+					<link><linkclipref>clipitem-201</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>2</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-301</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>2</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-102">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>400</start>
+					<end>1125</end>
+					<in>3150</in>
+					<out>3875</out>
+					<pproTicksIn>32006016000000</pproTicksIn>
+					<pproTicksOut>39372480000000</pproTicksOut>
+					<alphatype>none</alphatype>
+					<pixelaspectratio>square</pixelaspectratio>
+					<anamorphic>FALSE</anamorphic>
+					<file id="file-1"/>
+					<link><linkclipref>clipitem-102</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>3</clipindex></link>
+					<link><linkclipref>clipitem-202</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>3</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-302</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>3</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-103">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>1125</start>
+					<end>1375</end>
+					<in>3875</in>
+					<out>4125</out>
+					<pproTicksIn>39372480000000</pproTicksIn>
+					<pproTicksOut>41912640000000</pproTicksOut>
+					<alphatype>none</alphatype>
+					<pixelaspectratio>square</pixelaspectratio>
+					<anamorphic>FALSE</anamorphic>
+					<file id="file-1"/>
+					<link><linkclipref>clipitem-103</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>4</clipindex></link>
+					<link><linkclipref>clipitem-203</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>4</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-303</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>4</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+					<enabled>TRUE</enabled>
+					<locked>FALSE</locked>
+				</track>
+			</video>
+			<audio>
+				<format>
+					<samplecharacteristics>
+						<depth>16</depth>
+						<samplerate>44100</samplerate>
+					</samplecharacteristics>
+				</format>
+				<track premiereTrackType="Stereo">
+				<clipitem id="clipitem-200" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>0</start>
+					<end>150</end>
+					<in>3000</in>
+					<out>3150</out>
+					<pproTicksIn>30481920000000</pproTicksIn>
+					<pproTicksOut>32006016000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>1</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-100</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>1</clipindex></link>
+					<link><linkclipref>clipitem-200</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>1</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-300</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>1</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-201" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>150</start>
+					<end>400</end>
+					<in>2750</in>
+					<out>3000</out>
+					<pproTicksIn>27941760000000</pproTicksIn>
+					<pproTicksOut>30481920000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>1</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-101</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>2</clipindex></link>
+					<link><linkclipref>clipitem-201</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>2</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-301</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>2</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-202" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>400</start>
+					<end>1125</end>
+					<in>3150</in>
+					<out>3875</out>
+					<pproTicksIn>32006016000000</pproTicksIn>
+					<pproTicksOut>39372480000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>1</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-102</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>3</clipindex></link>
+					<link><linkclipref>clipitem-202</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>3</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-302</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>3</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-203" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>1125</start>
+					<end>1375</end>
+					<in>3875</in>
+					<out>4125</out>
+					<pproTicksIn>39372480000000</pproTicksIn>
+					<pproTicksOut>41912640000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>1</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-103</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>4</clipindex></link>
+					<link><linkclipref>clipitem-203</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>4</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-303</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>4</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+					<enabled>TRUE</enabled>
+					<locked>FALSE</locked>
+					<outputchannelindex>1</outputchannelindex>
+				</track>
+				<track premiereTrackType="Stereo">
+				<clipitem id="clipitem-300" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>0</start>
+					<end>150</end>
+					<in>3000</in>
+					<out>3150</out>
+					<pproTicksIn>30481920000000</pproTicksIn>
+					<pproTicksOut>32006016000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>2</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-100</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>1</clipindex></link>
+					<link><linkclipref>clipitem-200</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>1</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-300</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>1</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-301" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>150</start>
+					<end>400</end>
+					<in>2750</in>
+					<out>3000</out>
+					<pproTicksIn>27941760000000</pproTicksIn>
+					<pproTicksOut>30481920000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>2</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-101</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>2</clipindex></link>
+					<link><linkclipref>clipitem-201</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>2</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-301</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>2</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-302" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>400</start>
+					<end>1125</end>
+					<in>3150</in>
+					<out>3875</out>
+					<pproTicksIn>32006016000000</pproTicksIn>
+					<pproTicksOut>39372480000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>2</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-102</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>3</clipindex></link>
+					<link><linkclipref>clipitem-202</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>3</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-302</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>3</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+				<clipitem id="clipitem-303" premiereChannelType="stereo">
+					<masterclipid>masterclip-1</masterclipid>
+					<n>test.mp4</n>
+					<enabled>TRUE</enabled>
+					<duration>28179</duration>
+					<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+					<start>1125</start>
+					<end>1375</end>
+					<in>3875</in>
+					<out>4125</out>
+					<pproTicksIn>39372480000000</pproTicksIn>
+					<pproTicksOut>41912640000000</pproTicksOut>
+					<file id="file-1"/>
+					<sourcetrack><mediatype>audio</mediatype><trackindex>2</trackindex></sourcetrack>
+					<link><linkclipref>clipitem-103</linkclipref><mediatype>video</mediatype><trackindex>1</trackindex><clipindex>4</clipindex></link>
+					<link><linkclipref>clipitem-203</linkclipref><mediatype>audio</mediatype><trackindex>1</trackindex><clipindex>4</clipindex><groupindex>1</groupindex></link>
+					<link><linkclipref>clipitem-303</linkclipref><mediatype>audio</mediatype><trackindex>2</trackindex><clipindex>4</clipindex><groupindex>1</groupindex></link>
+				</clipitem>
+					<enabled>TRUE</enabled>
+					<locked>FALSE</locked>
+					<outputchannelindex>2</outputchannelindex>
+				</track>
+			</audio>
+		</media>
+		<timecode>
+			<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+			<string>00:00:00:00</string>
+			<frame>0</frame>
+			<displayformat>NDF</displayformat>
+		</timecode>
+	</sequence>
+	<clip id="masterclip-1">
+		<n>test.mp4</n>
+		<duration>28179</duration>
+		<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+		<file id="file-1">
+			<n>test.mp4</n>
+			<pathurl>file://localhost/Users/jervinquisada/custom-clip-finder/data/uploads/test.mp4</pathurl>
+			<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+			<duration>28179</duration>
+			<timecode>
+				<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+				<string>00:00:00:00</string>
+				<frame>0</frame>
+				<displayformat>NDF</displayformat>
+			</timecode>
+			<media>
+				<video>
+					<samplecharacteristics>
+						<rate><timebase>25</timebase><ntsc>FALSE</ntsc></rate>
+						<width>1280</width>
+						<height>720</height>
+						<anamorphic>FALSE</anamorphic>
+						<pixelaspectratio>square</pixelaspectratio>
+						<fielddominance>none</fielddominance>
+					</samplecharacteristics>
+				</video>
+				<audio>
+					<samplecharacteristics>
+						<depth>16</depth>
+						<samplerate>44100</samplerate>
+					</samplecharacteristics>
+					<channelcount>2</channelcount>
+				</audio>
+			</media>
+		</file>
+	</clip>
+</xmeml>

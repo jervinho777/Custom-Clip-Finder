@@ -1,0 +1,351 @@
+{
+  "example_id": "example_20251217_222100",
+  "template": {
+    "template_id": "template_20251217_222100",
+    "name": "Statement Hook Template",
+    "description": "Template basierend auf erfolgreichem Clip (100,000 Views)",
+    "created_from": {
+      "performance": {
+        "views": 100000,
+        "watch_time": 80
+      }
+    },
+    "when_to_use": [
+      "Video enthält statement Hook",
+      "Starker Payoff-Moment vorhanden",
+      "Original-Struktur optimierbar"
+    ],
+    "when_not_to_use": [
+      "Video hat keinen klaren Payoff-Moment",
+      "Topic zu komplex für schnellen Hook",
+      "Zielgruppe erwartet langsameren Aufbau"
+    ],
+    "structure": {
+      "step_1": {
+        "action": "Hauptinhalt mit Pattern Interrupts",
+        "criteria": "Alle 5-7 Sekunden Mini-Payoff",
+        "duration": "3.5 Sekunden"
+      }
+    },
+    "hook_formula": "[Starker erster Satz]",
+    "hook_examples": [
+      " Und wenn wir nicht in dieser Gleichwertigkeit sind, können wir natürlich auch nicht herausfinden,"
+    ],
+    "optimal_length": {
+      "min": 30,
+      "max": 60,
+      "sweet_spot": 45
+    },
+    "success_rate": 0.5,
+    "success_criteria": {
+      "min_views": 100000,
+      "min_watch_time": 72.0,
+      "min_followers": 2500.0
+    },
+    "tags": [
+      "statement",
+      "hook_moved_to_front",
+      "information_gap",
+      "plateau"
+    ]
+  },
+  "comparison": {
+    "used_segments": [
+      {
+        "original_start": 120.58,
+        "original_end": 124.12,
+        "clip_start": 0.5799999999999983,
+        "clip_end": 4.1200000000000045,
+        "text": " Und wenn wir nicht in dieser Gleichwertigkeit sind, können wir natürlich auch nicht herausfinden,",
+        "role": "hook",
+        "match_score": 1.0
+      },
+      {
+        "original_start": 124.14,
+        "original_end": 128.8,
+        "clip_start": 4.140000000000001,
+        "clip_end": 8.800000000000011,
+        "text": " was du willst, weil du einfach zu viel dann tust, was andere wollen.",
+        "role": "context",
+        "match_score": 1.0
+      },
+      {
+        "original_start": 129.96,
+        "original_end": 134.92,
+        "clip_start": 9.960000000000008,
+        "clip_end": 14.919999999999987,
+        "text": " Und vielleicht hast du die Möglichkeit mit mir ein bisschen auf die Reise zu gehen, uns mal zu schauen",
+        "role": "payoff",
+        "match_score": 1.0
+      },
+      {
+        "original_start": 134.92,
+        "original_end": 138.76,
+        "clip_start": 14.919999999999987,
+        "clip_end": 18.0,
+        "text": " und herauszufinden in dieser kurzen Zeit, was du willst.",
+        "role": "payoff",
+        "match_score": 1.0
+      }
+    ],
+    "removed_segments": [
+      {
+        "start": 0.0,
+        "end": 3.06,
+        "text": " Aber an dem Tag habe ich etwas entschieden und wusste, was will ich...."
+      },
+      {
+        "start": 3.38,
+        "end": 5.72,
+        "text": " Das war das erste Mal, ich will für meinen Sohn da sein...."
+      },
+      {
+        "start": 6.02,
+        "end": 7.32,
+        "text": " Und dann hat sich sehr viel geändert...."
+      },
+      {
+        "start": 7.46,
+        "end": 10.98,
+        "text": " Als ich das erste Mal diese Geschichte erzählt habe, habe ich für mich auch was verstanden,..."
+      },
+      {
+        "start": 11.3,
+        "end": 15.14,
+        "text": " dass ich in vielen Momenten in meinem Leben gar nicht für mich da war...."
+      },
+      {
+        "start": 20.900000000000002,
+        "end": 28.22,
+        "text": " Meistens die erste Frage, die du hörst, wenn du zu einem Psychologen gehst oder zu einem..."
+      },
+      {
+        "start": 28.22,
+        "end": 33.42,
+        "text": " Coach, dann ist die erste Frage, die du hörst, was willst du?..."
+      },
+      {
+        "start": 36.72,
+        "end": 40.36,
+        "text": " Welche Erwartungen und Wünsche hast du von diesem Leben?..."
+      },
+      {
+        "start": 42.44,
+        "end": 46.82,
+        "text": " Und das Faszinierende ist, wenn ich Menschen frage, was willst du?..."
+      },
+      {
+        "start": 48.02,
+        "end": 52.06,
+        "text": " Dann sehe ich bei Erwachsenen oft so eine kreative Demenz...."
+      },
+      {
+        "start": 66.54,
+        "end": 70.98,
+        "text": " Und ich glaube einfach, wir wissen oft nicht, was wir selber wollen, weil wir zu viele Dinge..."
+      },
+      {
+        "start": 70.98,
+        "end": 77.84,
+        "text": " tun, die wir gar nicht wollen, sondern zu viele Dinge tun, um andere glücklich zu machen...."
+      },
+      {
+        "start": 79.1,
+        "end": 84.5,
+        "text": " Konflikte entstehen übrigens meistens dann, wenn du etwas tust, was du gar nicht willst...."
+      },
+      {
+        "start": 85.5,
+        "end": 90.32,
+        "text": " Und wenn du etwas sagst, was andere nicht hören wollen oder wenn du etwas tust,..."
+      },
+      {
+        "start": 90.54,
+        "end": 92.5,
+        "text": " wie andere nicht wollen, dass du es so tust...."
+      },
+      {
+        "start": 93.74,
+        "end": 94.84,
+        "text": " Schon mal aufgefallen?..."
+      },
+      {
+        "start": 95.82,
+        "end": 96.38,
+        "text": " Spannend?..."
+      },
+      {
+        "start": 96.86,
+        "end": 103.92,
+        "text": " Oder wenn andere etwas sagen, wie du es nicht hören willst oder andere etwas tun, was du nicht mags..."
+      },
+      {
+        "start": 104.96,
+        "end": 110.26,
+        "text": " Und durch diese Konflikte, die wir haben im Inneren, verlieren wir oft die Gleichwertigkeit...."
+      },
+      {
+        "start": 111.42,
+        "end": 114.44,
+        "text": " Und das, was uns das Leben schenkt, ist die Liebe...."
+      }
+    ],
+    "restructuring": {
+      "original_order": [
+        120.58,
+        124.14,
+        129.96,
+        134.92
+      ],
+      "clip_order": [
+        0.5799999999999983,
+        4.140000000000001,
+        9.960000000000008,
+        14.919999999999987
+      ],
+      "reordered": true,
+      "reorder_pattern": "reordered"
+    },
+    "coverage": {
+      "original_duration": 1118.69,
+      "clip_duration": 18.0,
+      "coverage_percent": 1.6090248415557482,
+      "compression_ratio": 0.016090248415557482
+    }
+  },
+  "restructuring": {
+    "hook_strategy": {
+      "original_position": 120.58,
+      "clip_position": 0.5799999999999983,
+      "moved_to_front": true,
+      "hook_text": " Und wenn wir nicht in dieser Gleichwertigkeit sind, können wir natürlich auch nicht herausfinden,",
+      "hook_type": "statement",
+      "hook_strength": 6,
+      "why_effective": "Starker erster Eindruck"
+    },
+    "structure_pattern": {
+      "original": "120.6s→124.1s→130.0s→134.9s",
+      "clip": "0.6s→4.1s→10.0s→14.9s",
+      "pattern_name": "reordered",
+      "pattern_description": "Segmente neu angeordnet",
+      "timing": {
+        "hook_duration": 3.5799999999999983,
+        "first_loop": 3.5799999999999983,
+        "pattern_interrupts": [],
+        "total_duration": 18.0
+      }
+    },
+    "removed_parts": {
+      "intro": true,
+      "filler": true,
+      "repetition": false,
+      "slow_parts": true,
+      "removed_segments_count": 20
+    },
+    "compression": {
+      "ratio": 0.016090248415557482,
+      "strategy": "extreme_compression",
+      "removed_percent": 98.39097515844425
+    },
+    "effectiveness_score": 0.5
+  },
+  "hook_patterns": {
+    "hook_text": " Und wenn wir nicht in dieser Gleichwertigkeit sind, können wir natürlich auch nicht herausfinden,",
+    "hook_type": "statement",
+    "first_words": [
+      "Und",
+      "wenn",
+      "wir"
+    ],
+    "power_words": [],
+    "emotional_trigger": "curiosity",
+    "information_gap": true,
+    "hook_formula": "[Starker erster Satz]",
+    "timing": {
+      "duration": 3.5400000000000063,
+      "words_count": 14,
+      "words_per_second": 3.9548022598869985
+    },
+    "effectiveness": {
+      "score": 0.6,
+      "watch_time_impact": "medium",
+      "hook_strength": 6
+    },
+    "matched_patterns": [
+      "information_gap_hook"
+    ]
+  },
+  "structure_patterns": {
+    "structure_name": "reordered",
+    "structure": {
+      "content": {
+        "start": 0.5799999999999983,
+        "end": 4.1200000000000045,
+        "duration": 3.5400000000000063,
+        "role": "content",
+        "purpose": "Hauptinhalt mit Pattern Interrupts"
+      }
+    },
+    "timing": {
+      "hook_duration": 0,
+      "first_loop": 0,
+      "pattern_interrupts": [],
+      "total_duration": 18.0,
+      "optimal_length": {
+        "min": 30,
+        "max": 60,
+        "sweet_spot": 45
+      }
+    },
+    "tension_arc": {
+      "arc_type": "plateau",
+      "tension_points": [
+        {
+          "time": 0.5799999999999983,
+          "level": 6,
+          "reason": "content"
+        },
+        {
+          "time": 4.140000000000001,
+          "level": 6,
+          "reason": "content"
+        },
+        {
+          "time": 9.960000000000008,
+          "level": 6,
+          "reason": "content"
+        },
+        {
+          "time": 14.919999999999987,
+          "level": 6,
+          "reason": "content"
+        }
+      ],
+      "average_tension": 6.0,
+      "min_tension": 6,
+      "max_tension": 6
+    },
+    "effectiveness": {
+      "score": 0.5,
+      "watch_time_impact": "medium",
+      "completion_rate_impact": "medium"
+    }
+  },
+  "ai_analysis": {},
+  "performance": {
+    "views": 100000,
+    "watch_time": 80,
+    "followers": 5000,
+    "likes": 5000,
+    "shares": 500,
+    "comments": 300
+  },
+  "clip_metadata": {
+    "source": "timestamps",
+    "clip_start": 120.0,
+    "clip_end": 138.0,
+    "clip_duration": 18.0
+  },
+  "notes": "Extrem emotionaler Moment mit direkter Konfrontation - Hook wurde aus der Mitte nach vorne gezogen",
+  "created_at": "2025-12-17T22:21:00.851628"
+}

@@ -1,0 +1,75 @@
+{
+  "segment_selection_rules": [
+    "Select a self-contained moral claim that is understandable without prior context (e.g., 'Menschenaffen sch\u00e4men sich' + explanation).",
+    "Start on a high-emotion, high-contrast statement (animals = like us) rather than biography, credentials, or setup from the host.",
+    "Prefer segments where the speaker uses direct second-person address ('wie wir', 'wie sie alle hier sitzen') to force viewer self-involvement.",
+    "Keep segments that enumerate multiple emotions/needs in quick succession (e.g., 'Einsamkeit, Scham, Liebe') because lists create perceived authority and speed.",
+    "Choose segments containing a vivid, concrete scene the viewer can picture instantly (kids knocking on glass; ape turning away).",
+    "Keep segments that include a clear injustice/constraint metric (e.g., '150 Quadratmeter', 'Gruppe ... nicht selbst gesucht') to make the argument falsifiable and sticky.",
+    "End on a strong normative verdict ('v\u00f6llig absurd', 'nicht mehr zeitgem\u00e4\u00df') to provide closure and shareability.",
+    "Remove segments that require domain backstory (fish supply chain, whale shark pricing) unless the clip\u2019s core claim depends on it.",
+    "Remove interviewer questions, topic pivots, and hedging phrases; keep uninterrupted monologue blocks for retention.",
+    "Avoid segments dominated by numbers/credentials unless they directly intensify the ethical punch (here, only '150 Quadratmeter' is kept because it dramatizes confinement)."
+  ],
+  "timing_patterns": {
+    "clip_length_optimal": "35-55 seconds",
+    "hook_position": "first 1-3 seconds (open on the strongest, most controversial thesis + relatable subject)",
+    "payoff_position": "last 6-12 seconds (concrete example \u2192 rhetorical question \u2192 moral judgment)",
+    "pacing_rules": [
+      "No intro: begin mid-thought with a declarative claim; treat context as optional.",
+      "Use a 3-beat structure within ~40s: (1) claim, (2) evidence/constraints, (3) everyday example + verdict.",
+      "Maintain sentence density: average idea change every 3-6 seconds (emotion list, needs list, constraint list, example).",
+      "Place the most visual moment around the middle-to-late section (~25-35s) to re-hook attention (kids at glass).",
+      "Finish with an absolute-sounding conclusion (no open loop) to maximize comments/shares (people argue/agree)."
+    ]
+  },
+  "content_patterns": {
+    "kept_characteristics": [
+      "Universal empathy framing (animals experience human-like emotions).",
+      "Clear villain mechanism without naming a villain (captivity + gawking + forced social group).",
+      "Concrete sensory imagery (ape turns away; kids knocking; glass barrier).",
+      "Compression-friendly rhetoric: lists, parallel phrasing, and short clauses.",
+      "Built-in audience indictment ('angegafft werden') prompting self-reflection and debate."
+    ],
+    "removed_characteristics": [
+      "Biographical backstory (childhood aquariums, job history).",
+      "Institutional/industry logistics (how animals are sourced, transported, priced).",
+      "Long explanatory scaffolding and interviewer-led framing.",
+      "Niche specifics that slow comprehension (species details, global aquarium counts) unless directly tied to outrage."
+    ],
+    "transition_points": [
+      "Cut into the monologue at the moment of strongest generalizable claim (no host lead-in).",
+      "Maintain continuous argument flow across segments 42\u219243\u219244 (claim \u2192 needs/constraints \u2192 public behavior example \u2192 verdict).",
+      "Cut out immediately after the final normative sentence to avoid dilution or topic drift."
+    ]
+  },
+  "quality_indicators": {
+    "what_makes_good_cut": [
+      "First sentence is a complete hookable premise that triggers emotion or controversy without context.",
+      "Contains at least one instantly visualizable scene and one quantifiable constraint (e.g., space size).",
+      "Escalates: emotion claim \u2192 ethical framing \u2192 concrete example \u2192 strong concluding judgment.",
+      "Minimal pronoun ambiguity; viewer knows who is 'they' and what situation is being criticized within ~5 seconds.",
+      "Ends with a quote-worthy line that can be used as on-screen text and encourages discussion."
+    ],
+    "what_makes_bad_cut": [
+      "Starts with setup, credentials, or interviewer question before the core claim.",
+      "Requires prior segments to understand who/what is being discussed (missing referents).",
+      "Ends on a mid-thought or transitions to a new topic, reducing shareable closure.",
+      "Overloads with non-dramatic numbers/facts that don\u2019t intensify the emotional argument.",
+      "Lacks a concrete example; stays abstract and therefore feels preachy rather than vivid."
+    ]
+  },
+  "example_id": "example_001",
+  "selection_info": {
+    "selected_indices": [
+      42,
+      43,
+      44
+    ],
+    "matched_count": 3,
+    "coverage": 1.0
+  },
+  "compression_ratio": 0.04357816904285306,
+  "views": null,
+  "confidence": 0.606144455747711
+}
