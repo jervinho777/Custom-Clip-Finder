@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """
 Smart Restructure Data Prep - Auto-matches longforms with clips
-
 Scans a folder of mixed videos, transcribes all, finds which clips
-came from which longforms, creates training pairs automatically
+came from which longforms using SMART SIMILARITY MATCHING (not just duration)
+
+IMPROVED: Now matches based on transcript similarity, not just duration!
+- Handles edge cases like 10-min "shortform" that's actually a clip
+- Matches ALL pairs by similarity
+- Shorter video = clip, longer video = longform
 """
 
 import asyncio
@@ -97,75 +101,81 @@ class SmartRestructurePrep:
             # Calculate duration
             duration = segments[-1]['end'] if segments else 0
             
-            # Classify as longform or clip
-            if duration >= min_longform_duration:
-                video_type = 'longform'
-            elif duration <= max_clip_duration:
-                video_type = 'clip'
-            else:
-                video_type = 'unknown'
-            
-            transcripts.append({
+            # Store ALL videos with metadata (classification is just a hint, not used for matching!)
+            video_data = {
                 'file': video_file,
+                'name': video_file.name,
                 'transcript_path': cache_path,
                 'segments': segments,
                 'duration': duration,
-                'type': video_type,
-                'segment_count': len(segments)
-            })
+                'segment_count': len(segments),
+                # Just a hint, not used for matching!
+                'likely_type': 'clip' if duration < min_longform_duration else 'longform'
+            }
             
-            print(f"   ✅ {len(segments)} segments, {duration:.1f}s → {video_type.upper()}")
+            transcripts.append(video_data)
+            
+            print(f"   ✅ {len(segments)} segments, {duration:.1f}s → {video_data['likely_type'].upper()}")
         
-        # Separate longforms and clips
-        longforms = [t for t in transcripts if t['type'] == 'longform']
-        clips = [t for t in transcripts if t['type'] == 'clip']
-        
-        print(f"\n{'='*70}")
-        print(f"📊 CLASSIFICATION")
-        print(f"{'='*70}")
-        print(f"\n   Longforms: {len(longforms)}")
-        for lf in longforms:
-            print(f"      • {lf['file'].name} ({lf['duration']/60:.1f} min)")
-        
-        print(f"\n   Clips: {len(clips)}")
-        for clip in clips:
-            print(f"      • {clip['file'].name} ({clip['duration']:.1f}s)")
-        
-        if not longforms:
-            print(f"\n❌ No longforms found! (need videos >5min)")
+        if len(transcripts) < 2:
+            print(f"\n❌ Need at least 2 videos to match!")
             return
         
-        if not clips:
-            print(f"\n❌ No clips found! (need videos <2min)")
-            return
-        
-        # Match clips to longforms
+        # Match ALL pairs by similarity (not pre-classified groups)
         print(f"\n{'='*70}")
-        print(f"🔗 MATCHING CLIPS TO LONGFORMS")
+        print(f"🔗 SMART MATCHING (Similarity-based)")
         print(f"{'='*70}")
+        print(f"\n   Comparing ALL {len(transcripts)} videos...")
+        print(f"   Not limited by duration classification!")
         
         matches = []
         
-        for clip in clips:
-            best_match = self._find_best_longform(clip, longforms)
-            
-            if best_match:
-                matches.append({
-                    'longform': best_match['longform'],
-                    'clip': clip,
-                    'similarity': best_match['similarity'],
-                    'matched_segments': best_match['matched_count']
-                })
+        for i, video_a in enumerate(transcripts):
+            for j, video_b in enumerate(transcripts):
+                # Skip same video and duplicates (only check each pair once)
+                if i >= j:
+                    continue
                 
-                print(f"\n   ✅ MATCH FOUND:")
-                print(f"      Clip: {clip['file'].name}")
-                print(f"      Longform: {best_match['longform']['file'].name}")
-                print(f"      Similarity: {best_match['similarity']:.0%}")
-                print(f"      Matched: {best_match['matched_count']}/{len(clip['segments'])} segments")
-            else:
-                print(f"\n   ⚠️  NO MATCH:")
-                print(f"      Clip: {clip['file'].name}")
-                print(f"      (couldn't find source longform)")
+                # Calculate similarity between ANY two videos
+                similarity_result = self._calculate_similarity(
+                    video_a['segments'],
+                    video_b['segments']
+                )
+                
+                if not similarity_result:
+                    continue
+                
+                similarity = similarity_result['similarity']
+                matched_segs = similarity_result['matched_count']
+                
+                # Match if similarity > 40% (lower threshold for edge cases)
+                if similarity > 0.40:
+                    # Determine which is clip/longform by duration
+                    # Shorter video = clip, longer video = longform
+                    if video_a['duration'] < video_b['duration']:
+                        clip = video_a
+                        longform = video_b
+                    else:
+                        clip = video_b
+                        longform = video_a
+                    
+                    matches.append({
+                        'clip': clip,
+                        'longform': longform,
+                        'similarity': similarity,
+                        'matched_segments': matched_segs
+                    })
+                    
+                    print(f"\n   ✅ MATCH FOUND:")
+                    print(f"      Clip: {clip['name']}")
+                    print(f"      Longform: {longform['name']}")
+                    print(f"      Similarity: {similarity:.0%}")
+                    print(f"      Matched: {matched_segs}/{clip['segment_count']} segments")
+                    
+                    # Flag edge cases where "longform by duration" is actually a clip
+                    if clip['likely_type'] == 'longform':
+                        print(f"      💡 Edge case: Clip classified as longform by duration!")
+                        print(f"         (Duration: {clip['duration']:.1f}s > {min_longform_duration:.0f}s threshold)")
         
         if not matches:
             print(f"\n❌ No matches found!")
@@ -180,16 +190,30 @@ class SmartRestructurePrep:
         print(f"📦 CREATING EXAMPLES")
         print(f"{'='*70}")
         
+        # Get max existing example number
+        existing = list(self.examples_dir.glob("example_*"))
+        if existing:
+            try:
+                next_num = max([int(d.name.split('_')[1]) for d in existing if d.is_dir()]) + 1
+            except (ValueError, IndexError):
+                next_num = 1
+        else:
+            next_num = 1
+        
+        print(f"\n   Starting from example_{next_num:03d}")
+        
         created_examples = []
         
-        for i, match in enumerate(matches, 1):
-            example_id = f"example_{i:03d}"
-            
-            # Check if already exists
-            example_dir = self.examples_dir / example_id
-            if example_dir.exists():
-                print(f"\n   ⚠️  {example_id} already exists, skipping...")
+        for match in matches:
+            # Check if THIS SPECIFIC MATCH already exists
+            if self._match_already_exists(match):
+                print(f"\n   ⚠️  Match already exists:")
+                print(f"      Longform: {match['longform']['name']}")
+                print(f"      Clip: {match['clip']['name']}")
+                print(f"      Skipping...")
                 continue
+            
+            example_id = f"example_{next_num:03d}"
             
             print(f"\n   Creating {example_id}...")
             
@@ -200,6 +224,7 @@ class SmartRestructurePrep:
             
             if example:
                 created_examples.append(example)
+                next_num += 1  # Increment after successful creation
         
         # Summary
         print(f"\n{'='*70}")
@@ -217,72 +242,107 @@ class SmartRestructurePrep:
         
         return created_examples
     
-    def _find_best_longform(
+    def _calculate_similarity(
         self,
-        clip: Dict,
-        longforms: List[Dict],
-        min_similarity: float = 0.20  # Lowered to catch more matches
+        segments_a: List[Dict],
+        segments_b: List[Dict]
     ) -> Dict:
         """
-        Find which longform this clip came from
+        Calculate similarity between two sets of segments
         
-        Uses text matching to find segments
+        Uses text matching to find how many segments match
+        Returns similarity score and matched count
         """
         
-        best_match = None
-        best_score = 0
+        if not segments_a or not segments_b:
+            return None
         
-        for longform in longforms:
-            # Count how many clip segments match longform segments
-            matched_count = 0
-            total_similarity = 0
-            
-            for clip_seg in clip['segments']:
-                clip_text = clip_seg['text'].lower()
-                clip_words = set(clip_text.split())
-                
-                # Find best matching segment in longform
-                for long_seg in longform['segments']:
-                    long_text = long_seg['text'].lower()
-                    long_words = set(long_text.split())
-                    
-                    # Jaccard similarity
-                    intersection = len(clip_words & long_words)
-                    union = len(clip_words | long_words)
-                    jaccard = intersection / union if union > 0 else 0
-                    
-                    # ALSO check substring match (more lenient for exact clips)
-                    clip_text_clean = ''.join(clip_text.split()).lower()
-                    long_text_clean = ''.join(long_text.split()).lower()
-                    substring_match = clip_text_clean in long_text_clean if len(clip_text_clean) > 15 else False
-                    
-                    # Match if EITHER good Jaccard OR substring found
-                    if jaccard > 0.4 or substring_match:  # Lowered threshold
-                        matched_count += 1
-                        # Boost similarity for substring matches
-                        total_similarity += max(jaccard, 0.7 if substring_match else 0)
-                        break  # Found match for this clip segment
-            
-            # Calculate overall match score
-            if matched_count > 0:
-                avg_similarity = total_similarity / matched_count
-                coverage = matched_count / len(clip['segments'])
-                score = avg_similarity * coverage
-                
-                if score > best_score:
-                    best_score = score
-                    best_match = {
-                        'longform': longform,
-                        'similarity': avg_similarity,
-                        'matched_count': matched_count,
-                        'coverage': coverage
-                    }
+        # Count how many segments_a match segments_b
+        matched_count = 0
+        total_similarity = 0
         
-        # Return only if good enough match
-        if best_match and best_match['similarity'] >= min_similarity:
-            return best_match
+        for seg_a in segments_a:
+            text_a = seg_a.get('text', '').lower()
+            words_a = set(text_a.split())
+            
+            if not words_a:
+                continue
+            
+            # Find best matching segment in segments_b
+            best_jaccard = 0
+            found_match = False
+            
+            for seg_b in segments_b:
+                text_b = seg_b.get('text', '').lower()
+                words_b = set(text_b.split())
+                
+                if not words_b:
+                    continue
+                
+                # Jaccard similarity
+                intersection = len(words_a & words_b)
+                union = len(words_a | words_b)
+                jaccard = intersection / union if union > 0 else 0
+                
+                # ALSO check substring match (more lenient for exact clips)
+                text_a_clean = ''.join(text_a.split()).lower()
+                text_b_clean = ''.join(text_b.split()).lower()
+                substring_match = text_a_clean in text_b_clean if len(text_a_clean) > 15 else False
+                
+                # Match if EITHER good Jaccard OR substring found
+                if jaccard > 0.4 or substring_match:
+                    found_match = True
+                    # Boost similarity for substring matches
+                    best_jaccard = max(jaccard, 0.7 if substring_match else 0)
+                    break  # Found match for this segment
+            
+            if found_match:
+                matched_count += 1
+                total_similarity += best_jaccard
+        
+        # Calculate overall similarity
+        if matched_count > 0:
+            avg_similarity = total_similarity / matched_count
+            coverage = matched_count / len(segments_a)
+            overall_similarity = avg_similarity * coverage
+            
+            return {
+                'similarity': overall_similarity,
+                'matched_count': matched_count,
+                'coverage': coverage
+            }
         
         return None
+    
+    def _match_already_exists(self, match: Dict) -> bool:
+        """Check if this specific longform+clip pair already exists"""
+        longform_name = match['longform']['name']
+        clip_name = match['clip']['name']
+        
+        for example_dir in self.examples_dir.glob("example_*"):
+            if not example_dir.is_dir():
+                continue
+            
+            metadata_file = example_dir / 'metadata.json'
+            if not metadata_file.exists():
+                continue
+            
+            try:
+                with open(metadata_file) as f:
+                    existing = json.load(f)
+                
+                # Check if filenames match
+                existing_longform = existing.get('longform', {}).get('filename')
+                existing_clip = existing.get('viral_clip', {}).get('filename')
+                
+                if (existing_longform == longform_name and 
+                    existing_clip == clip_name):
+                    return True
+            except (json.JSONDecodeError, KeyError, AttributeError):
+                # Skip corrupted metadata files
+                continue
+        
+        return False
     
     async def _create_example_from_match(
         self,
@@ -320,12 +380,14 @@ class SmartRestructurePrep:
                 'clip_original': str(clip['file'])
             },
             'longform': {
+                'filename': longform['name'],
                 'video': str(longform_dest),
                 'transcript': str(longform_transcript_dest),
                 'duration': longform['duration'],
                 'segments': longform['segment_count']
             },
             'viral_clip': {
+                'filename': clip['name'],
                 'video': str(clip_dest),
                 'transcript': str(clip_transcript_dest),
                 'duration': clip['duration'],
@@ -333,10 +395,11 @@ class SmartRestructurePrep:
                 'views': None,  # TODO: Ask user for views
                 'vir_score': None
             },
-            'match_quality': {
+            'match_info': {
                 'similarity': match['similarity'],
                 'matched_segments': match['matched_segments'],
-                'total_clip_segments': len(clip['segments'])
+                'total_clip_segments': len(clip['segments']),
+                'was_edge_case': clip['likely_type'] == 'longform'
             },
             'status': 'ready'
         }
@@ -345,8 +408,14 @@ class SmartRestructurePrep:
         with open(metadata_file, 'w') as f:
             json.dump(metadata, f, indent=2)
         
-        print(f"      ✅ Created: {example_id}")
-        print(f"         Similarity: {match['similarity']:.0%}")
+        print(f"\n   ✅ Created {example_id}")
+        print(f"      Longform: {longform['name']} ({longform['duration']:.1f}s)")
+        print(f"      Clip: {clip['name']} ({clip['duration']:.1f}s)")
+        print(f"      Similarity: {match['similarity']:.0%}")
+        
+        # Notify about edge cases
+        if clip['likely_type'] == 'longform':
+            print(f"      💡 Edge case handled: Clip was >5min but matched by similarity!")
         
         return metadata
 
@@ -365,9 +434,11 @@ async def main():
     print(f"\nThis will:")
     print(f"  1. Scan all videos in folder")
     print(f"  2. Transcribe each one (cached if already done)")
-    print(f"  3. Auto-detect longforms vs clips")
-    print(f"  4. Match clips to their source longforms")
+    print(f"  3. Match ALL pairs by transcript similarity")
+    print(f"  4. Determine clip/longform per pair (shorter=clip, longer=longform)")
     print(f"  5. Create organized training examples")
+    print(f"\n💡 NEW: Smart similarity matching handles edge cases!")
+    print(f"   (e.g., 10-min 'shortform' that's actually a clip)")
     
     response = input(f"\nReady to scan {source_folder}? (y/n): ").strip().lower()
     

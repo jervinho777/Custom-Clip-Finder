@@ -1388,6 +1388,155 @@ Gib FINALE, BULLETPROOF Antwort:
                     if isinstance(result, dict):
                         total += result.get('usage', {}).get('total_tokens', 0)
         return total
+    
+    async def single_ai_call(self, prompt: str, model: str = 'sonnet', 
+                             system: str = None, response_format: str = None, **kwargs) -> str:
+        """
+        Call single AI (for fast operations)
+        Used in coarse scan and refinement
+        
+        Args:
+            prompt: The prompt to send
+            model: Model name ('sonnet', 'opus', 'haiku') - maps to AI names
+            system: Optional system message
+            response_format: Optional format hint (not enforced)
+            **kwargs: Additional parameters (max_tokens, temperature, etc.)
+        
+        Returns:
+            Response text as string
+        """
+        # Map model names to AI names
+        model_to_ai = {
+            'haiku': 'sonnet',  # Use sonnet as fast option (haiku not always available)
+            'sonnet': 'sonnet',
+            'opus': 'opus',
+            'gpt5': 'gpt5',
+            'gemini': 'gemini',
+            'deepseek': 'deepseek',
+            'grok': 'grok'
+        }
+        
+        ai_name = model_to_ai.get(model, 'sonnet')
+        
+        try:
+            result = await self.ensemble.call_ai(
+                ai_name=ai_name,
+                prompt=prompt,
+                system=system if system else "You are an expert AI assistant.",
+                max_tokens=kwargs.get('max_tokens', 4000),
+                temperature=kwargs.get('temperature', 0.7)
+            )
+            
+            if not result.get('success'):
+                print(f"      ⚠️  Single AI call failed: {result.get('error', 'Unknown error')}")
+                return "{}"
+            
+            content = result.get('content', '')
+            return content if content else "{}"
+            
+        except Exception as e:
+            print(f"      ⚠️  Single AI call error: {e}")
+            return "{}"
+    
+    async def parallel_quick_score(self, prompt: str, num_ais: int = 6, 
+                                   system: str = None) -> List[int]:
+        """
+        Get quick numeric scores from multiple AIs in parallel
+        Used in mini-godmode quality filter
+        Returns list of scores (0-100)
+        
+        Args:
+            prompt: Scoring prompt
+            num_ais: Number of AIs to use (default: 6)
+            system: Optional system message
+        
+        Returns:
+            List of integer scores (0-100)
+        """
+        # Get available AIs
+        available_ais = [name for name, ai in self.ensemble.ais.items() 
+                        if ai.get('status') == '✅']
+        
+        # Limit to requested number
+        ais_to_use = available_ais[:num_ais]
+        
+        if not ais_to_use:
+            return [50]  # Default score if no AIs available
+        
+        # Build tasks for parallel execution
+        tasks = [
+            self._single_score_call(ai_name, prompt, system)
+            for ai_name in ais_to_use
+        ]
+        
+        # Execute in parallel
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            print(f"      ⚠️  Parallel scoring error: {e}")
+            return [50]
+        
+        # Extract scores
+        scores = []
+        for result in results:
+            if isinstance(result, Exception):
+                continue
+            
+            # Extract number from response
+            score = self._extract_number_from_text(str(result))
+            if score is not None and 0 <= score <= 100:
+                scores.append(score)
+        
+        return scores if scores else [50]  # Default to 50 if all failed
+    
+    async def _single_score_call(self, ai_name: str, prompt: str, system: str = None) -> str:
+        """Helper: Single AI scoring call"""
+        try:
+            result = await self.ensemble.call_ai(
+                ai_name=ai_name,
+                prompt=prompt,
+                system=system if system else "You are a viral content evaluator. Return only a number 0-100.",
+                max_tokens=100,  # Short response for scoring
+                temperature=0.3  # Lower temp for scoring consistency
+            )
+            
+            if not result.get('success'):
+                return "50"  # Default score on error
+            
+            content = result.get('content', '')
+            return content if content else "50"
+            
+        except Exception as e:
+            return "50"  # Default score on error
+    
+    def _extract_number_from_text(self, text: str) -> Optional[int]:
+        """Extract first number from text (for scoring)"""
+        import re
+        
+        if not text:
+            return None
+        
+        # Look for explicit score patterns (in order of specificity)
+        patterns = [
+            r'score[:\s]+(\d+)',
+            r'rating[:\s]+(\d+)',
+            r'(\d+)\s*/\s*100',
+            r'(\d+)\s*points',
+            r'^(\d+)$',  # Just a number on its own line
+            r'\b(\d+)\b'  # Any standalone number
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text, re.IGNORECASE | re.MULTILINE)
+            if match:
+                try:
+                    num = int(match.group(1))
+                    if 0 <= num <= 100:
+                        return num
+                except (ValueError, IndexError):
+                    continue
+        
+        return None
 
 
 # Test function
