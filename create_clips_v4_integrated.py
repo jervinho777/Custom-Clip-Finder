@@ -218,7 +218,78 @@ class CreateClipsV4Integrated:
         self.transcript_dir = self.data_dir / "cache" / "transcripts"
         self.transcript_dir.mkdir(parents=True, exist_ok=True)
         
+        # Load latest VIRAL_PRINCIPLES (Master Brain - self-learning!)
+        self.VIRAL_PRINCIPLES = self._load_viral_principles()
+        brain_version = self.VIRAL_PRINCIPLES.get('version', 'unknown')
+        brain_updated = self.VIRAL_PRINCIPLES.get('updated_at', 'unknown')
+        print(f"   🧠 Loaded Brain: v{brain_version}")
+        if brain_updated != 'unknown':
+            print(f"   📅 Updated: {brain_updated}")
+        
+        # Also load legacy principles for backward compatibility
+        try:
+            from learnings_extractor import LearningsExtractor
+            extractor = LearningsExtractor()
+            self.PRINCIPLES = extractor.get_all_principles()
+        except Exception as e:
+            self.PRINCIPLES = {}
+        
         print("="*70 + "\n")
+    
+    def _load_viral_principles(self) -> Dict:
+        """Load latest master brain (VIRAL_PRINCIPLES.json)"""
+        
+        principles_file = Path("data/learnings/VIRAL_PRINCIPLES.json")
+        
+        if not principles_file.exists():
+            print(f"   ⚠️  VIRAL_PRINCIPLES.json not found - using defaults")
+            print(f"   💡 Run: python viral_pattern_analyzer.py to train brain")
+            return self._get_default_principles()
+        
+        try:
+            with open(principles_file, 'r', encoding='utf-8') as f:
+                principles = json.load(f)
+            return principles
+        except Exception as e:
+            print(f"   ⚠️  Failed to load VIRAL_PRINCIPLES.json: {e}")
+            return self._get_default_principles()
+    
+    def _get_default_principles(self) -> Dict:
+        """Fallback principles if brain not yet trained"""
+        return {
+            'version': '1.0-default',
+            'updated_at': 'never',
+            'note': 'Run viral_pattern_analyzer.py to train brain',
+            'core_algorithm': {
+                'principle': 'Maximize watchtime through engagement',
+                'metrics': ['completion_rate', 'watch_time', 'engagement']
+            },
+            'hook_principles': {
+                'core': 'Stop scroll within 3 seconds',
+                'methods': ['curiosity_gap', 'bold_statement', 'question', 'pattern_interrupt']
+            },
+            'duration_principles': {
+                'core': 'Balance completeness with engagement',
+                'observations': ['Varies by content type', 'Completeness matters']
+            },
+            'cutting_principles': {
+                'core': 'Every word must earn its place',
+                'what_to_cut': ['Unnecessary descriptors', 'Filler words'],
+                'what_to_preserve': ['Core narrative', 'Emotional beats']
+            },
+            'timing_principles': {
+                'core': 'Strategic silence creates impact',
+                'when_to_pause': ['After questions', 'Before payoff'],
+                'when_not_to_pause': ['High-energy sequences']
+            },
+            'structure_principles': {
+                'core': 'Structure adapts to content type',
+                'viable_patterns': {
+                    'story': 'Setup → Escalation → Resolution',
+                    'insight': 'Problem → Analysis → Solution'
+                }
+            }
+        }
     
     def _get_quality_tier(self, score: int) -> str:
         """
@@ -946,28 +1017,14 @@ Antworte in JSON:
         
         print(f"\n   ✅ Polished: {len(polished_moments)} moments")
         
-        # STAGE 2.5: Learning-Based Intelligent Cuts
-        viral_optimized = await self._learning_based_cuts(polished_moments)
+        # STAGE 2.5: Comprehensive Viral Composition (Multi-AI)
+        # Replaces old Stages 2.5-2.9 with intelligent holistic optimization
+        composed_moments = await self._viral_composition(polished_moments, segments)
         
-        print(f"\n   ✅ Viral-optimized: {len(viral_optimized)} moments")
-        
-        # STAGE 2.6: Cross-Moment Hook Extraction
-        hook_enhanced = await self._cross_moment_hook_extraction(viral_optimized, segments)
-        
-        print(f"\n   ✅ Hook-enhanced: {len(hook_enhanced)} moments")
-        
-        # STAGE 2.7: Micro-Level Text Optimization
-        micro_optimized = await self._micro_text_optimization(hook_enhanced)
-        
-        print(f"\n   ✅ Micro-optimized: {len(micro_optimized)} moments")
-        
-        # STAGE 2.8: Dramatic Structure & Timing
-        dramatically_timed = await self._dramatic_timing_optimization(micro_optimized)
-        
-        print(f"\n   ✅ Dramatically timed: {len(dramatically_timed)} moments")
+        print(f"\n   ✅ Viral composition complete: {len(composed_moments)} moments")
         
         # GODMODE: Batched Premium Evaluation
-        viral_moments = await self._batched_godmode_evaluation(dramatically_timed)
+        viral_moments = await self._batched_godmode_evaluation(composed_moments)
         
         print(f"\n{'='*70}")
         print(f"✅ PIPELINE COMPLETE")
@@ -983,10 +1040,13 @@ Antworte in JSON:
         print(f"   Stage 1 (Batch Refinement):   $0.60")
         print(f"   Stage 1.75 (Open Loop):       $0.00 (rule-based)")
         print(f"   Stage 2 (Conditional):        $0.30")
-        print(f"   Godmode (Batched):            $0.80")
+        print(f"   Stage 2.5 (Viral Composition): $6.00  ← Multi-AI, Comprehensive!")
+        print(f"   Godmode (Premium Evaluation): $0.80")
         print(f"   " + "-"*50)
-        print(f"   TOTAL:                        $3.20")
-        print(f"   (Old system: $12.50 - Saved 74%!)")
+        print(f"   TOTAL:                        $9.20")
+        print(f"   (Old rigid system: $12.50)")
+        print(f"   (Previous 5-stage: $19.30)")
+        print(f"   💰 Savings: 52% vs 5-stage, 26% vs old!")
         print(f"{'='*70}")
         
         return viral_moments
@@ -3727,6 +3787,437 @@ Return JSON only.
         # Default: rant
         return 'rant'
     
+    async def _viral_composition(self, moments: List[Dict], segments: List[Dict]) -> List[Dict]:
+        """
+        Stage 2.5: Comprehensive Viral Composition (Multi-AI)
+        
+        PRINCIPLE: Holistic optimization, not sequential pipeline
+        - AI analyzes each moment completely
+        - Decides what optimizations are needed
+        - Applies them intelligently
+        - Hook extraction only if beneficial
+        - Cuts only where wasteful
+        - Timing only when appropriate
+        - Structure only if clear
+        
+        Uses 2-3 AI ensemble for creative decisions
+        
+        Args:
+            moments: Refined moments from Stage 2
+            segments: All video segments (for hook extraction)
+            
+        Returns:
+            Viral-ready composed moments
+        """
+        if not self.ensemble or not self.consensus:
+            return moments
+        
+        print(f"\n📍 STAGE 2.5: VIRAL COMPOSITION (Comprehensive Multi-AI)")
+        print(f"   Using Brain: v{self.VIRAL_PRINCIPLES.get('version', 'unknown')}")
+        print(f"   Principle: Holistic optimization, not forced pipeline")
+        print(f"   Strategy: AI decides what each moment needs (using learned principles)")
+        
+        # Use latest VIRAL_PRINCIPLES (Master Brain - self-learning!)
+        PRINCIPLES = {
+            'duration': self.VIRAL_PRINCIPLES.get('duration_principles', {}),
+            'hooks': self.VIRAL_PRINCIPLES.get('hook_principles', {}),
+            'cuts': self.VIRAL_PRINCIPLES.get('cutting_principles', {}),
+            'timing': self.VIRAL_PRINCIPLES.get('timing_principles', {}),
+            'structure': self.VIRAL_PRINCIPLES.get('structure_principles', {})
+        }
+        
+        # Extract potential hooks ONCE for entire video
+        print(f"\n   🔍 Analyzing video for potential hooks...")
+        video_hooks = await self._extract_video_hooks(segments, PRINCIPLES.get('hooks', {}))
+        print(f"   ✅ Found {len(video_hooks)} potential hooks")
+        
+        composed_moments = []
+        
+        for i, moment in enumerate(moments, 1):
+            print(f"\n   Composing moment {i}/{len(moments)}...")
+            
+            # Get comprehensive optimization from Multi-AI ensemble
+            composed = await self._compose_moment_with_ensemble(
+                moment=moment,
+                video_hooks=video_hooks,
+                principles=PRINCIPLES
+            )
+            
+            # Show what was done
+            optimizations = composed.get('optimizations_applied', [])
+            if optimizations:
+                print(f"      ✨ Applied: {', '.join(optimizations)}")
+                if 'hook_added' in composed:
+                    hook_text = composed['hook_added']
+                    if isinstance(hook_text, str):
+                        print(f"         • Hook: '{hook_text[:40]}...'")
+                if 'time_saved' in composed:
+                    print(f"         • Cuts: {composed['time_saved']:.1f}s removed")
+                if 'pauses_added' in composed:
+                    print(f"         • Timing: {composed['pauses_added']} strategic pauses")
+            else:
+                print(f"      ✅ Already optimal - no changes needed")
+            
+            composed_moments.append(composed)
+        
+        print(f"\n   💎 Viral Composition Complete")
+        return composed_moments
+    
+    async def _extract_video_hooks(self, segments: List[Dict], hook_principles: Dict) -> List[Dict]:
+        """
+        Extract potential hooks from entire video ONCE
+        (Not per moment - efficiency!)
+        """
+        if not self.consensus:
+            return []
+        
+        full_text = ' '.join([s.get('text', '') for s in segments[:100]])  # First ~5 min
+        
+        methods = hook_principles.get('methods', [])
+        examples = hook_principles.get('examples_from_data', [])
+        
+        # Build lists before f-string (can't use chr(10) or backslashes in f-string expressions)
+        methods_list = '\n'.join(['- ' + str(m) for m in methods])
+        examples_list = '\n'.join(['- ' + str(ex) for ex in examples[:3]])
+        
+        prompt = f"""
+PRINCIPLE: {hook_principles.get('principle', 'Hook must stop the scroll within 3 seconds')}
+
+Hook types (from proven data):
+{methods_list}
+
+VIDEO CONTENT (excerpt):
+"{full_text[:1500]}..."
+
+YOUR TASK:
+Find 5-10 strongest potential hooks in this video.
+Hook = something that could be PRE-PENDED to another moment.
+
+Examples from 6M+ view clips:
+{examples_list}
+
+RESPONSE (JSON):
+{{
+  "hooks": [
+    {{
+      "text": "Arbeite niemals für Geld",
+      "start": 123.5,
+      "end": 125.8,
+      "strength": 95,
+      "theme": "work_money",
+      "why_powerful": "Bold contrarian statement"
+    }}
+  ]
+}}
+
+Focus on QUALITY over quantity. 5 great hooks > 20 mediocre ones.
+Return JSON only.
+"""
+        
+        try:
+            result = await self.consensus.single_ai_call(
+                prompt=prompt,
+                model='sonnet',
+                system="You are a viral content expert. Extract the strongest hooks from this transcript.",
+                max_tokens=3000,
+                temperature=0.7
+            )
+            
+            analysis = self._parse_json_response(result)
+            
+            if not analysis or not isinstance(analysis, dict):
+                return []
+            
+            hooks = analysis.get('hooks', [])
+            
+            # Add segment data
+            for hook in hooks:
+                start_time = float(hook.get('start', 0))
+                end_time = float(hook.get('end', 0))
+                hook['segments'] = [
+                    s for s in segments
+                    if start_time <= s.get('start', 0) <= end_time
+                ]
+                hook['duration'] = end_time - start_time
+            
+            return hooks
+        except Exception as e:
+            print(f"      ⚠️ Hook extraction failed: {e}")
+            return []
+    
+    async def _compose_moment_with_ensemble(self, moment: Dict, video_hooks: List[Dict], principles: Dict) -> Dict:
+        """
+        Use 2-3 AI ensemble for comprehensive composition
+        """
+        if not self.consensus:
+            return moment
+        
+        # Build comprehensive prompt with ALL principles
+        segments = moment.get('segments', [])
+        if not segments:
+            return moment
+        
+        moment_text = ' '.join([s.get('text', '') for s in segments])
+        
+        duration_principle = principles.get('duration', {})
+        hooks_principle = principles.get('hooks', {})
+        cuts_principle = principles.get('cuts', {})
+        timing_principle = principles.get('timing', {})
+        structure_principle = principles.get('structure', {})
+        
+        # Build text lists before f-string (can't use chr(10) or backslashes in f-string expressions)
+        duration_observations = '\n'.join(duration_principle.get('observations', []))
+        hooks_methods = '\n'.join(hooks_principle.get('methods', []))
+        cuts_what_to_cut = '\n'.join(cuts_principle.get('what_to_cut', []))
+        cuts_what_to_keep = '\n'.join(cuts_principle.get('what_to_preserve', cuts_principle.get('what_to_keep', [])))
+        timing_when_to_pause = '\n'.join(timing_principle.get('when_to_pause', []))
+        timing_when_not_to_pause = '\n'.join(timing_principle.get('when_not_to_pause', timing_principle.get('when_NOT_to_pause', [])))
+        hooks_list = '\n'.join([f"- \"{h.get('text', '')[:60]}\" (strength: {h.get('strength', 0)})" for h in video_hooks[:5]])
+        
+        prompt = f"""
+You are a viral video composer. Optimize this moment HOLISTICALLY.
+
+MOMENT TO COMPOSE:
+Duration: {moment.get('duration', 0):.1f}s
+Text: "{moment_text[:800]}"
+
+AVAILABLE PRINCIPLES (from Master Brain - Self-Learning System):
+
+1. DURATION:
+{duration_principle.get('core', duration_principle.get('principle', 'Balance completeness with engagement'))}
+Observations: {duration_observations}
+Content Type Guidance: {json.dumps(duration_principle.get('content_type_guidance', {}), indent=2, ensure_ascii=False)}
+
+2. HOOKS:
+{hooks_principle.get('core', hooks_principle.get('principle', 'Hook must stop the scroll'))}
+Methods: {hooks_methods}
+Extraction: {json.dumps(hooks_principle.get('extraction', {}), indent=2, ensure_ascii=False)}
+
+3. CUTS:
+{cuts_principle.get('core', cuts_principle.get('principle', 'Every word must earn its place'))}
+What to cut: {cuts_what_to_cut}
+What to keep: {cuts_what_to_keep}
+
+4. TIMING:
+{timing_principle.get('core', timing_principle.get('principle', 'Strategic silence creates impact'))}
+When to pause: {timing_when_to_pause}
+When NOT to pause: {timing_when_not_to_pause}
+
+5. STRUCTURE:
+{structure_principle.get('core', structure_principle.get('principle', 'Structure adapts to content type'))}
+Viable Patterns: {json.dumps(structure_principle.get('viable_patterns', structure_principle.get('patterns_by_type', {})), indent=2, ensure_ascii=False)}
+Anti-Pattern: {structure_principle.get('anti_pattern', 'Forcing all content into one template')}
+
+AVAILABLE HOOKS (from video):
+{hooks_list}
+
+YOUR TASK:
+Analyze this moment and decide WHAT optimizations would help:
+
+1. Does it need a hook? (only if weak opening)
+2. Does it need micro-cuts? (only if wasteful)
+3. Does it need timing pauses? (only if appropriate)
+4. Does it have clear payoff? (structure)
+5. Is duration optimal? (completeness vs engagement)
+
+CRITICAL: Don't force optimizations! 
+- If moment is already strong, say so!
+- Only optimize what NEEDS it!
+- Quality > quantity of changes!
+
+RESPONSE (JSON):
+{{
+  "needs_optimization": true,
+  "analysis": "Why this moment needs/doesn't need work",
+  
+  "optimizations": {{
+    "hook_extraction": {{
+      "needed": false,
+      "hook_to_use": null,
+      "reasoning": "why this hook helps or not needed"
+    }},
+    
+    "micro_cuts": {{
+      "needed": false,
+      "segments_to_optimize": []
+    }},
+    
+    "timing_pauses": {{
+      "needed": false,
+      "pauses": []
+    }},
+    
+    "structure_adjustment": {{
+      "needed": false,
+      "content_type": "story/insight/rant/etc",
+      "adjustments": "what to change"
+    }}
+  }},
+  
+  "expected_improvement": "How this will increase watchtime/engagement"
+}}
+
+Be HONEST. If moment is already good, don't force changes!
+Return JSON only.
+"""
+        
+        # Get 2 AI responses (for consensus)
+        models = ['sonnet', 'sonnet']  # Use 2 Sonnet calls for cost efficiency
+        
+        responses = []
+        for model in models:
+            try:
+                response = await self.consensus.single_ai_call(
+                    prompt=prompt,
+                    model=model,
+                    system="You are a viral video composer. Apply principles holistically, not rigidly.",
+                    max_tokens=3000,
+                    temperature=0.7
+                )
+                responses.append({
+                    'model': model,
+                    'response': response
+                })
+            except Exception as e:
+                print(f"         ⚠️ AI call failed ({model}): {e}")
+        
+        if not responses:
+            return moment  # Fallback
+        
+        # Build consensus
+        composed = self._build_composition_consensus(moment, responses, video_hooks)
+        
+        return composed
+    
+    def _build_composition_consensus(self, moment: Dict, responses: List[Dict], video_hooks: List[Dict]) -> Dict:
+        """
+        Build consensus from 2-3 AI responses
+        Apply optimizations that MAJORITY agrees on
+        """
+        import json
+        
+        try:
+            parsed_responses = []
+            for r in responses:
+                parsed = self._parse_json_response(r['response'])
+                if parsed:
+                    parsed_responses.append(parsed)
+        except Exception as e:
+            print(f"         ⚠️ Failed to parse responses: {e}")
+            return {
+                **moment,
+                'optimizations_applied': [],
+                'composition_note': 'AI responses failed to parse'
+            }
+        
+        if not parsed_responses:
+            return {
+                **moment,
+                'optimizations_applied': [],
+                'composition_note': 'No valid responses'
+            }
+        
+        # Check what optimizations MAJORITY wants
+        needs_hook = sum([
+            1 for r in parsed_responses 
+            if r.get('optimizations', {}).get('hook_extraction', {}).get('needed', False)
+        ]) >= len(parsed_responses) / 2
+        
+        needs_cuts = sum([
+            1 for r in parsed_responses 
+            if r.get('optimizations', {}).get('micro_cuts', {}).get('needed', False)
+        ]) >= len(parsed_responses) / 2
+        
+        needs_timing = sum([
+            1 for r in parsed_responses 
+            if r.get('optimizations', {}).get('timing_pauses', {}).get('needed', False)
+        ]) >= len(parsed_responses) / 2
+        
+        # Apply optimizations
+        composed = {**moment}
+        optimizations_applied = []
+        
+        # 1. Hook extraction (if majority agrees)
+        if needs_hook:
+            hook_data = parsed_responses[0].get('optimizations', {}).get('hook_extraction', {})
+            hook_text = hook_data.get('hook_to_use')
+            if hook_text:
+                # Find hook in video_hooks
+                matching_hook = next((h for h in video_hooks if hook_text[:30] in h.get('text', '')), None)
+                if matching_hook and matching_hook.get('segments'):
+                    # Prepend hook
+                    composed['segments'] = matching_hook['segments'] + composed.get('segments', [])
+                    composed['start'] = matching_hook.get('start', composed.get('start', 0))
+                    composed['duration'] = composed.get('end', 0) - matching_hook.get('start', composed.get('start', 0))
+                    composed['hook_added'] = hook_text
+                    optimizations_applied.append('hook_extraction')
+        
+        # 2. Micro-cuts (if majority agrees)
+        if needs_cuts:
+            cuts_data = parsed_responses[0].get('optimizations', {}).get('micro_cuts', {})
+            cuts = cuts_data.get('segments_to_optimize', [])
+            if cuts:
+                # Apply cuts conservatively
+                time_saved = 0
+                segments = composed.get('segments', [])
+                
+                for cut in cuts:
+                    idx = cut.get('index')
+                    if idx < len(segments):
+                        original_text = segments[idx].get('text', '')
+                        optimized_text = cut.get('optimized', original_text)
+                        
+                        if len(optimized_text) < len(original_text) and len(original_text) > 0:
+                            # Calculate time saved
+                            seg_duration = segments[idx].get('end', 0) - segments[idx].get('start', 0)
+                            reduction = (len(original_text) - len(optimized_text)) / len(original_text)
+                            time_saved += seg_duration * reduction
+                            
+                            # Apply cut
+                            segments[idx]['text'] = optimized_text
+                            segments[idx]['end'] = segments[idx].get('end', 0) - seg_duration * reduction
+                
+                if time_saved > 0:
+                    composed['segments'] = segments
+                    composed['time_saved'] = time_saved
+                    composed['duration'] = composed.get('duration', 0) - time_saved
+                    composed['end'] = composed.get('end', 0) - time_saved
+                    optimizations_applied.append('micro_cuts')
+        
+        # 3. Timing pauses (if majority agrees)
+        if needs_timing:
+            timing_data = parsed_responses[0].get('optimizations', {}).get('timing_pauses', {})
+            pauses = timing_data.get('pauses', [])
+            if pauses:
+                # Add pause markers
+                segments = composed.get('segments', [])
+                pause_count = 0
+                
+                for pause in pauses:
+                    after_idx = pause.get('after_segment')
+                    if after_idx < len(segments):
+                        pause_seg = {
+                            'start': segments[after_idx].get('end', 0),
+                            'end': segments[after_idx].get('end', 0) + pause.get('duration', 0.8),
+                            'text': f"[PAUSE: {pause.get('duration', 0.8):.1f}s]",
+                            'is_pause': True,
+                            'pause_type': pause.get('type', 'strategic')
+                        }
+                        segments.insert(after_idx + 1, pause_seg)
+                        pause_count += 1
+                
+                if pause_count > 0:
+                    composed['segments'] = segments
+                    composed['pauses_added'] = pause_count
+                    composed['end'] = segments[-1].get('end', composed.get('end', 0))
+                    composed['duration'] = segments[-1].get('end', composed.get('end', 0)) - composed.get('start', 0)
+                    optimizations_applied.append('timing_pauses')
+        
+        composed['optimizations_applied'] = optimizations_applied
+        composed['composition_method'] = f'{len(responses)}-AI consensus'
+        
+        return composed
+    
     async def _learning_based_cuts(self, moments: List[Dict]) -> List[Dict]:
         """
         Stage 2.5: Learning-Based Intelligent Cuts
@@ -3747,37 +4238,11 @@ Return JSON only.
             return moments
         
         print(f"\n📍 STAGE 2.5: Learning-Based Intelligent Cuts")
-        print(f"   Applying proven patterns from 175 analyzed clips")
+        print(f"   Principle-Based: Applying principles from 175+ proven clips")
         print(f"   Goal: Viral-optimized duration and cuts")
         
-        PROVEN_LEARNINGS = {
-            'optimal_duration': {
-                'story': (45, 65),  # 45-65s for stories
-                'insight': (20, 40),  # 20-40s for insights
-                'rant': (30, 50),  # 30-50s for rants
-                'parable': (50, 70)  # 50-70s for parables
-            },
-            'hook_rules': {
-                'max_setup': 3.0,  # Hook must happen in first 3s
-                'proven_hooks': [
-                    'arbeite niemals',
-                    'was ist hier passiert',
-                    'das problem',
-                    'ich sage dir',
-                    'stell dir vor'
-                ]
-            },
-            'cut_patterns': {
-                'remove_filler_start': True,  # Cut rambling starts
-                'remove_repetition': True,  # Cut excessive repetition
-                'keep_payoff': True,  # Always keep the payoff
-                'optimize_middle': True  # Cut unnecessary middle
-            },
-            'payoff_timing': {
-                'min_from_end': 5.0,  # Payoff in last 5-10s
-                'max_from_end': 10.0
-            }
-        }
+        # Load duration principles (NOT hardcoded ranges!)
+        duration_principles = self.PRINCIPLES.get('duration', {})
         
         optimized = []
         
@@ -3793,28 +4258,34 @@ Return JSON only.
             text = ' '.join([s.get('text', '') for s in segments]).lower()
             moment_type = self._detect_moment_type(text)
             
-            # Get optimal duration for this type
-            optimal_range = PROVEN_LEARNINGS['optimal_duration'].get(moment_type, (30, 60))
             current_duration = moment.get('duration', 0)
             
-            # Check if optimization needed
-            if optimal_range[0] <= current_duration <= optimal_range[1]:
-                print(f"      ✅ Duration optimal: {current_duration:.1f}s (target: {optimal_range[0]}-{optimal_range[1]}s)")
+            # Use AI to decide if optimization needed (principle-based, not rigid)
+            optimization_plan = await self._analyze_duration_optimization(
+                moment, 
+                moment_type,
+                current_duration,
+                duration_principles
+            )
+            
+            if not optimization_plan.get('needs_optimization', False):
+                print(f"      ✅ Duration optimal: {current_duration:.1f}s (complete for content type)")
                 optimized.append(moment)
                 continue
             
             # Need to optimize
-            target_duration = (optimal_range[0] + optimal_range[1]) / 2
+            target_duration = optimization_plan.get('target_duration', current_duration)
             reduction_needed = current_duration - target_duration
             
             print(f"      🔧 Duration: {current_duration:.1f}s → Target: {target_duration:.1f}s (cut {reduction_needed:.1f}s)")
+            print(f"      💡 Reasoning: {optimization_plan.get('reasoning', 'Optimize for completeness')}")
             
             # Call AI to make intelligent cuts
             optimized_moment = await self._apply_intelligent_cuts(
                 moment, 
                 moment_type,
                 target_duration,
-                PROVEN_LEARNINGS
+                duration_principles
             )
             
             optimized.append(optimized_moment)
@@ -3825,7 +4296,81 @@ Return JSON only.
         print(f"\n   💎 Learning-Based Cuts Complete")
         return optimized
     
-    async def _apply_intelligent_cuts(self, moment: Dict, moment_type: str, target_duration: float, learnings: Dict) -> Dict:
+    async def _analyze_duration_optimization(self, moment: Dict, moment_type: str, current_duration: float, duration_principles: Dict) -> Dict:
+        """
+        Principle-based analysis: Should this moment be optimized?
+        NOT rigid ranges, but principle-based evaluation
+        """
+        if not self.consensus:
+            return {'needs_optimization': False}
+        
+        segments = moment.get('segments', [])
+        if not segments:
+            return {'needs_optimization': False}
+        
+        full_text = ' '.join([s.get('text', '') for s in segments[:20]])  # First 20 segments
+        
+        # Format principles for prompt
+        from learnings_extractor import LearningsExtractor
+        extractor = LearningsExtractor()
+        principles_text = extractor.format_principles_for_prompt('duration')
+        
+        prompt = f"""
+PRINCIPLES (from 175+ proven clips):
+{principles_text}
+
+CURRENT MOMENT:
+Type: {moment_type}
+Duration: {current_duration:.1f}s
+Content: "{full_text[:500]}..."
+
+YOUR TASK:
+Based on PRINCIPLES above (not rigid rules), should this be optimized?
+Consider:
+- Is story/insight complete?
+- Does length serve engagement or hurt it?
+- What would maximize watchtime?
+- Is it too short (incomplete) or too long (rambling)?
+
+RESPONSE FORMAT (JSON):
+{{
+  "needs_optimization": true,
+  "target_duration": 45.0,  # Optimal duration based on completeness
+  "reasoning": "Story is complete at 45s, remaining 20s is rambling",
+  "completeness_score": 8,  # 0-10: How complete is the moment?
+  "engagement_risk": "high"  # low/medium/high: Risk of drop-off
+}}
+
+If optimization NOT needed:
+{{
+  "needs_optimization": false,
+  "reasoning": "Duration serves completeness and engagement"
+}}
+
+Return JSON only.
+"""
+        
+        try:
+            result = await self.consensus.single_ai_call(
+                prompt=prompt,
+                model='sonnet',
+                system="You are a content optimization expert. Apply principles, not rigid rules.",
+                max_tokens=1000,
+                temperature=0.7
+            )
+            
+            analysis = self._parse_json_response(result)
+            
+            if not analysis or not isinstance(analysis, dict):
+                return {'needs_optimization': False}
+            
+            return analysis
+            
+        except Exception as e:
+            print(f"         ⚠️ Duration analysis failed: {e}")
+            return {'needs_optimization': False}
+    
+    async def _apply_intelligent_cuts(self, moment: Dict, moment_type: str, target_duration: float, duration_principles: Dict) -> Dict:
         """
         Apply AI-powered intelligent cuts based on learnings
         """
@@ -3839,46 +4384,50 @@ Return JSON only.
         full_text = ' '.join([s.get('text', '') for s in segments])
         current_duration = moment.get('duration', 0)
         
+        # Format principles for prompt
+        from learnings_extractor import LearningsExtractor
+        extractor = LearningsExtractor()
+        principles_text = extractor.format_principles_for_prompt('duration')
+        cut_principles_text = extractor.format_principles_for_prompt('cuts')
+        
         prompt = f"""
-You are a viral video editor with deep knowledge of 175 analyzed viral clips.
+PRINCIPLES (from 175+ proven clips):
+{principles_text}
+
+CUT PRINCIPLES:
+{cut_principles_text}
 
 MOMENT TYPE: {moment_type}
 CURRENT DURATION: {current_duration:.1f}s
 TARGET DURATION: {target_duration:.1f}s
 REDUCTION NEEDED: {current_duration - target_duration:.1f}s
 
-PROVEN LEARNINGS:
-- Hook must be in first 3 seconds (strong, immediate)
-- Cut ALL unnecessary setup/rambling
-- Keep the core story/insight
-- Payoff must be in last 5-10 seconds
-- Remove filler words, repetition
-- Every second must add value
-
 CURRENT TEXT:
 "{full_text[:1000]}"
 
 YOUR TASK:
+Apply PRINCIPLES above (not rigid templates) to optimize this moment.
 1. Identify which segments to KEEP (by index, 0-indexed)
 2. Cut to target duration while maintaining:
-   - Strong hook (first 3s)
+   - Completeness (story/insight must be complete)
    - Core message
-   - Complete arc
+   - Emotional resonance
    - Powerful payoff
 
 RESPONSE FORMAT (JSON):
 {{
   "keep_segments": [0, 1, 3, 5, 7],  # Indices to keep
   "cuts_made": [
-    "Removed rambling intro",
-    "Cut repetitive middle section",
-    "Tightened to maintain pacing"
+    "Removed unnecessary descriptors",
+    "Tightened transitions",
+    "Preserved emotional beats"
   ],
   "new_hook": "First 3s after cuts",
-  "payoff_preserved": true
+  "payoff_preserved": true,
+  "completeness_maintained": true
 }}
 
-Make aggressive cuts. Viral clips are TIGHT. No fluff.
+Apply principles, not templates. Every cut should serve watchtime maximization.
 Return JSON only.
 """
         
@@ -4012,26 +4561,29 @@ Return JSON only.
         # Build context of all segments (limit for prompt)
         full_text = ' '.join([s.get('text', '') for s in segments[:100]])  # Limit to first 100 segments
         
+        # Format hook principles for prompt
+        from learnings_extractor import LearningsExtractor
+        extractor = LearningsExtractor()
+        hook_principles_text = extractor.format_principles_for_prompt('hooks')
+        
         prompt = f"""
-Analyze this video transcript and extract POWER HOOKS.
-
-POWER HOOKS are:
-- Bold declarative statements ("Arbeite niemals für Geld")
-- Provocative questions ("Was wäre wenn...")
-- Contrarian views ("Das Gegenteil ist wahr")
-- Emotional statements ("Das ist das Problem")
-- Pattern interrupts ("Stopp")
+PRINCIPLE (from 175+ proven clips):
+{hook_principles_text}
 
 TRANSCRIPT (excerpt):
 "{full_text[:2000]}..."
 
 YOUR TASK:
 Find the 10 strongest standalone hooks in this transcript.
+Apply PRINCIPLES above - hooks can be ANY of the methods listed.
+Different content types have different hook styles.
+
 Each hook should be:
 - 3-15 seconds max
 - Standalone (makes sense without context)
 - Attention-grabbing
 - Thematically clear
+- Matches one of the proven methods
 
 RESPONSE FORMAT (JSON):
 {{
@@ -4042,13 +4594,15 @@ RESPONSE FORMAT (JSON):
       "end": 125.8,
       "strength": 95,
       "theme": "work_money",
-      "type": "bold_statement"
+      "type": "bold_statement",
+      "method": "Bold statement (contrarian view)"
     }},
     ...
   ]
 }}
 
 Score strength 0-100. Return top 10 hooks.
+Find hooks that match the PRINCIPLE, not a template.
 Return JSON only.
 """
         
@@ -4239,25 +4793,10 @@ Return JSON only.
         
         print(f"\n📍 STAGE 2.7: Micro-Level Text Optimization")
         print(f"   Principle: Every Word Earns Its Place")
-        print(f"   Strategy: Word-level precision cuts")
+        print(f"   Strategy: Word-level precision cuts (principle-based)")
         
-        MICRO_CUT_EXAMPLES = {
-            'remove_descriptors': [
-                ('gelangweilt, wie Kinder manchmal sind', 'gelangweilt'),
-                ('Super, kriegen wir noch Geld dafür. Nächster Tag.', 'Super. Nächster Tag.'),
-                ('Moment, 50 Cent ist ja nur die Hälfte, ist ja Betrug. Immerhin.', '50 Cent? Nur die Hälfte!'),
-            ],
-            'tighten_transitions': [
-                ('Als der Alte am nächsten Tag kommt', 'Nächster Tag'),
-                ('und als er diesmal geht', 'dann'),
-                ('Als sie von ihm ablassen', 'Danach'),
-            ],
-            'remove_obvious': [
-                ('Das ist klar', ''),
-                ('wie gesagt', ''),
-                ('sozusagen', ''),
-            ]
-        }
+        # Load cut principles (NOT hardcoded examples!)
+        cut_principles = self.PRINCIPLES.get('cuts', {})
         
         optimized = []
         
@@ -4277,11 +4816,11 @@ Return JSON only.
             print(f"      Current: {current_duration:.1f}s")
             print(f"      Target: {target_duration:.1f}s (remove {target_reduction:.1f}s)")
             
-            # Call AI for micro-optimization
+            # Call AI for micro-optimization (principle-based)
             optimized_moment = await self._apply_micro_cuts(
                 moment, 
                 target_duration,
-                MICRO_CUT_EXAMPLES
+                cut_principles
             )
             
             actual_reduction = current_duration - optimized_moment.get('duration', current_duration)
@@ -4292,7 +4831,7 @@ Return JSON only.
         print(f"\n   💎 Micro-Text Optimization Complete")
         return optimized
     
-    async def _apply_micro_cuts(self, moment: Dict, target_duration: float, examples: Dict) -> Dict:
+    async def _apply_micro_cuts(self, moment: Dict, target_duration: float, cut_principles: Dict) -> Dict:
         """
         Apply AI-powered micro-cuts within segments
         """
@@ -4335,17 +4874,19 @@ Segment {seg_info['index']} ({seg_info['duration']:.1f}s):
 "{seg_info['text']}"
 """
         
+        # Format cut principles for prompt
+        from learnings_extractor import LearningsExtractor
+        extractor = LearningsExtractor()
+        cut_principles_text = extractor.format_principles_for_prompt('cuts')
+        
         prompt += f"""
 
-MICRO-CUT PRINCIPLES:
+PRINCIPLES (from Longform→Clip analysis):
+{cut_principles_text}
 
-1. Remove Unnecessary Descriptors
-   Example: "gelangweilt, wie Kinder manchmal sind" → "gelangweilt"
-   Cut: ", wie Kinder manchmal sind" (adds nothing to story)
-
-2. Tighten Transitions
-   Example: "Als der Alte am nächsten Tag kommt" → "Nächster Tag"
-   Cut: Verbose transitions, keep momentum
+YOUR TASK:
+Apply principles above (not examples blindly).
+Every cut decision should serve watchtime maximization.
 
 3. Remove Obvious Statements
    Example: "Super, kriegen wir noch Geld dafür. Nächster Tag." → "Super. Nächster Tag."
@@ -4491,31 +5032,17 @@ Return JSON only.
         print(f"   Principle: Silence Creates Impact")
         print(f"   Strategy: Strategic pauses for emotional beats")
         
-        TIMING_PRINCIPLES = {
-            'question_answer_gap': {
-                'min': 1.0,  # Minimum pause after question
-                'max': 2.5,  # Maximum pause (don't lose momentum)
-                'optimal': 1.5  # Sweet spot
-            },
-            'payoff_anticipation': {
-                'min': 0.5,  # Brief beat before payoff
-                'max': 1.5,
-                'optimal': 0.8
-            },
-            'emotional_beat': {
-                'after_revelation': 0.8,
-                'after_twist': 1.0,
-                'after_climax': 0.5
-            }
-        }
+        # Load timing principles (NOT hardcoded!)
+        timing_principles = self.PRINCIPLES.get('timing', {})
+        optimal_durations = timing_principles.get('optimal_durations', {})
         
         timed_moments = []
         
         for i, moment in enumerate(moments, 1):
             print(f"\n   Analyzing timing for moment {i}/{len(moments)}...")
             
-            # Detect timing opportunities
-            timing_plan = await self._analyze_timing_opportunities(moment, TIMING_PRINCIPLES)
+            # Detect timing opportunities (principle-based)
+            timing_plan = await self._analyze_timing_opportunities(moment, timing_principles)
             
             if timing_plan.get('opportunities', 0) == 0:
                 print(f"      ℹ️  No timing opportunities - keeping original")
@@ -4573,33 +5100,20 @@ SEGMENTS:
             marker = " [LAST]" if seg_info['is_last'] else ""
             prompt += f"{seg_info['index']}: \"{seg_info['text']}\"{marker}\n"
         
+        # Format timing principles for prompt
+        from learnings_extractor import LearningsExtractor
+        extractor = LearningsExtractor()
+        timing_principles_text = extractor.format_principles_for_prompt('timing')
+        
         prompt += f"""
 
-TIMING PRINCIPLES:
-
-1. QUESTION → PAUSE → ANSWER
-   When: Rhetorical question followed by answer
-   Example: "Was ist hier passiert?" → PAUSE 1.5s → "Die Freude am Tun..."
-   Duration: 1.0-2.5s (optimal: 1.5s)
-
-2. PAYOFF ANTICIPATION
-   When: Before the money shot / key insight
-   Example: Before "Die Freude am Tun ist ersetzt durch Belohnung"
-   Duration: 0.5-1.5s (optimal: 0.8s)
-
-3. EMOTIONAL BEAT
-   When: After revelation, twist, or climax
-   Example: After surprising outcome in story
-   Duration: 0.5-1.0s
-
-CRITICAL RULES:
-- Don't over-pause (max 2-3 pauses per moment)
-- Pauses must serve emotional purpose
-- Keep energy and momentum
-- Strategic, not random
+PRINCIPLES (from proven clips):
+{timing_principles_text}
 
 YOUR TASK:
-Identify where strategic pauses would enhance dramatic impact.
+Identify IF pauses would help (not WHERE they "should" go).
+Some content needs pauses, some doesn't.
+Timing serves content, not rigid templates.
 
 RESPONSE FORMAT (JSON):
 {{
@@ -4735,6 +5249,261 @@ Return JSON only.
         }
         
         return enhanced
+    
+    async def _payoff_isolation_polish(self, moments: List[Dict]) -> List[Dict]:
+        """
+        Stage 2.9: Payoff Isolation & Final Polish
+        
+        Principle: The Money Shot Deserves Its Moment
+        - Identifies the payoff/insight/punchline
+        - Creates clear separation from setup
+        - Adds anticipation beat before payoff
+        - Ensures payoff has space to land
+        
+        Args:
+            moments: List of dramatically-timed moments from Stage 2.8
+            
+        Returns:
+            List of final polished moments with isolated payoffs
+        """
+        if not self.consensus:
+            return moments
+        
+        print(f"\n📍 STAGE 2.9: Payoff Isolation & Final Polish")
+        print(f"   Principle: The Money Shot Deserves Its Moment")
+        print(f"   Strategy: Isolate payoff, create separation, final impact")
+        
+        polished_moments = []
+        
+        for i, moment in enumerate(moments, 1):
+            print(f"\n   Analyzing moment {i}/{len(moments)}...")
+            
+            # Detect if moment has clear payoff
+            payoff_analysis = await self._detect_payoff(moment)
+            
+            if not payoff_analysis.get('has_payoff', False):
+                print(f"      ℹ️  No clear payoff - keeping as-is")
+                polished_moments.append(moment)
+                continue
+            
+            # Apply payoff isolation
+            polished = self._isolate_payoff(moment, payoff_analysis)
+            
+            payoff_text = payoff_analysis.get('payoff_text', '')[:50]
+            anticipation = payoff_analysis.get('anticipation_pause', 0)
+            
+            print(f"      ✨ Payoff isolated: '{payoff_text}...'")
+            print(f"      ⏱️  Added {anticipation:.1f}s anticipation beat")
+            
+            polished_moments.append(polished)
+        
+        print(f"\n   💎 Payoff Isolation Complete")
+        return polished_moments
+    
+    async def _detect_payoff(self, moment: Dict) -> Dict:
+        """
+        Detect if moment has clear payoff and where it is
+        """
+        if not self.consensus:
+            return {'has_payoff': False}
+        
+        segments = moment.get('segments', [])
+        if not segments:
+            return {'has_payoff': False}
+        
+        # Build segment context (skip pause markers)
+        non_pause_segments = [(i, seg) for i, seg in enumerate(segments) if not seg.get('is_pause')]
+        segments_info = []
+        for idx, (orig_idx, seg) in enumerate(non_pause_segments):
+            segments_info.append({
+                'index': idx,  # Index in non-pause list (for AI response)
+                'original_index': orig_idx,  # Original index in segments
+                'text': seg.get('text', ''),
+                'is_last': idx == len(non_pause_segments) - 1
+            })
+        
+        prompt = f"""
+Analyze this moment for a clear PAYOFF (money shot/insight/punchline).
+
+SEGMENTS:
+"""
+        
+        for seg_info in segments_info:
+            marker = " [LAST]" if seg_info['is_last'] else ""
+            prompt += f"{seg_info['index']}: \"{seg_info['text']}\"{marker}\n"
+        
+        # Format structure principles for prompt
+        from learnings_extractor import LearningsExtractor
+        extractor = LearningsExtractor()
+        structure_principles_text = extractor.format_principles_for_prompt('structure')
+        
+        prompt += f"""
+
+PRINCIPLES (from proven clips):
+{structure_principles_text}
+
+PAYOFF DEFINITION:
+A payoff is the moment where:
+- The insight/lesson is delivered
+- The punchline lands
+- The "aha!" happens
+- The question is answered
+- The tension resolves
+
+YOUR TASK:
+1. Identify content type FIRST
+2. Apply appropriate structure for THAT type
+3. Does this moment have a clear payoff?
+4. If yes, which segment(s) contain it?
+5. Should there be a separation/pause before it?
+
+Don't force all content into one template!
+
+RESPONSE FORMAT (JSON):
+{{
+  "has_payoff": true,
+  "payoff_segment_indices": [7, 8],  # Segment(s) with payoff
+  "payoff_text": "Die Freude am Tun ist ersetzt worden durch Belohnung.",
+  "payoff_type": "insight",  # insight/punchline/revelation/answer
+  "needs_separation": true,
+  "anticipation_pause": 0.8,  # Seconds of pause before payoff
+  "reasoning": "Clear insight delivered after story setup"
+}}
+
+If no clear payoff: {{"has_payoff": false}}
+Return JSON only.
+"""
+        
+        try:
+            result = await self.consensus.single_ai_call(
+                prompt=prompt,
+                model='sonnet',
+                system="You are a content structure expert. Identify payoffs (money shots) that deserve isolation.",
+                max_tokens=2000,
+                temperature=0.7
+            )
+            
+            analysis = self._parse_json_response(result)
+            
+            if not analysis or not isinstance(analysis, dict):
+                return {'has_payoff': False}
+            
+            return analysis
+            
+        except Exception as e:
+            print(f"         ⚠️ Payoff detection failed: {e}")
+            return {'has_payoff': False}
+    
+    def _isolate_payoff(self, moment: Dict, payoff_analysis: Dict) -> Dict:
+        """
+        Apply payoff isolation based on analysis
+        """
+        if not payoff_analysis.get('needs_separation', False):
+            # Payoff already isolated, just mark it
+            return {
+                **moment,
+                'payoff_isolated': True,
+                'payoff_text': payoff_analysis.get('payoff_text', ''),
+                'payoff_type': payoff_analysis.get('payoff_type', 'unknown')
+            }
+        
+        segments = moment.get('segments', [])
+        payoff_indices = payoff_analysis.get('payoff_segment_indices', [])
+        anticipation_pause = payoff_analysis.get('anticipation_pause', 0.8)
+        
+        if not payoff_indices:
+            # No indices provided, can't isolate
+            return {
+                **moment,
+                'payoff_isolated': False,
+                'payoff_text': payoff_analysis.get('payoff_text', '')
+            }
+        
+        # Build non-pause segment mapping (same as in _detect_payoff)
+        non_pause_segments = [(i, seg) for i, seg in enumerate(segments) if not seg.get('is_pause')]
+        
+        # payoff_indices are indices in the non-pause list
+        # Find first payoff segment's original index
+        first_payoff_orig_idx = None
+        for idx in payoff_indices:
+            if idx < len(non_pause_segments):
+                orig_idx = non_pause_segments[idx][0]
+                if first_payoff_orig_idx is None or orig_idx < first_payoff_orig_idx:
+                    first_payoff_orig_idx = orig_idx
+        
+        if first_payoff_orig_idx is None or first_payoff_orig_idx == 0:
+            # Payoff is first segment, can't add pause before
+            return {
+                **moment,
+                'payoff_isolated': True,
+                'payoff_text': payoff_analysis.get('payoff_text', ''),
+                'payoff_type': payoff_analysis.get('payoff_type', 'unknown')
+            }
+        
+        # Insert anticipation pause before payoff
+        new_segments = []
+        pause_inserted = False
+        
+        for i, seg in enumerate(segments):
+            # Add segment
+            new_segments.append(seg)
+            
+            # Check if we should add pause after this segment
+            if i == first_payoff_orig_idx - 1 and not pause_inserted:
+                # Add anticipation pause
+                pause_seg = {
+                    'start': seg.get('end', seg.get('start', 0) + 1),
+                    'end': seg.get('end', seg.get('start', 0) + 1) + anticipation_pause,
+                    'text': f"[ANTICIPATION PAUSE: {anticipation_pause:.1f}s]",
+                    'is_pause': True,
+                    'pause_type': 'payoff_anticipation',
+                    'pause_reasoning': 'Brief beat before money shot delivery'
+                }
+                new_segments.append(pause_seg)
+                pause_inserted = True
+        
+        # Adjust timestamps after pause
+        cumulative_pause = 0
+        adjusted_segments = []
+        
+        for seg in new_segments:
+            if seg.get('is_pause'):
+                pause_duration = seg.get('end', 0) - seg.get('start', 0)
+                cumulative_pause += pause_duration
+                adjusted_segments.append(seg)
+            else:
+                seg_start = seg.get('start', 0)
+                seg_end = seg.get('end', 0)
+                adjusted_seg = {
+                    **seg,
+                    'start': seg_start + cumulative_pause,
+                    'end': seg_end + cumulative_pause
+                }
+                adjusted_segments.append(adjusted_seg)
+        
+        # Mark payoff segments (by matching text)
+        payoff_text = payoff_analysis.get('payoff_text', '').lower()
+        for adj_seg in adjusted_segments:
+            if not adj_seg.get('is_pause'):
+                seg_text = adj_seg.get('text', '').lower()
+                # Mark if text matches payoff or is in payoff indices
+                if payoff_text and payoff_text[:30] in seg_text:
+                    adj_seg['is_payoff'] = True
+        
+        # Rebuild moment
+        final_end = adjusted_segments[-1].get('end', moment.get('end', 0))
+        polished = {
+            **moment,
+            'segments': adjusted_segments,
+            'end': final_end,
+            'duration': final_end - moment.get('start', 0),
+            'payoff_isolated': True,
+            'payoff_text': payoff_analysis.get('payoff_text', ''),
+            'payoff_type': payoff_analysis.get('payoff_type', 'unknown'),
+            'anticipation_pause_added': anticipation_pause
+        }
+        
+        return polished
     
     async def _batched_godmode_evaluation(self, moments: List[Dict]) -> List[Dict]:
         """
